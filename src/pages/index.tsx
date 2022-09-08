@@ -27,6 +27,7 @@ export default function Home(): JSX.Element {
       }
     })
     const { data } = res.data;
+    console.log(data)
     return {
       data,
     };
@@ -62,7 +63,7 @@ export default function Home(): JSX.Element {
     return images;
   }, [data]);
 
-  useEffect(() => {console.log(formattedData)}, [formattedData])
+  // useEffect(() => {console.log(data)}, [data])
 
   // TODO RENDER LOADING SCREEN
   if (isLoading){
@@ -86,14 +87,15 @@ export default function Home(): JSX.Element {
         <CardList cards={formattedData} />
         {/* TODO RENDER LOAD MORE BUTTON IF DATA HAS NEXT PAGE */}
 
-        {hasNextPage && (
           <Button 
             isLoading={isFetchingNextPage}
             loadingText="Carregando..."
-            onClick={() => fetchNextPage()}>
-              Ver mais
+            onClick={() => fetchNextPage()}
+            mt="8"
+            >
+              Carregar mais
           </Button>
-        )}
+        
       </Box>
     </>
   );

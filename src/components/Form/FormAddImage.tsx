@@ -44,6 +44,9 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
     },
     {
       // TODO ONSUCCESS MUTATION
+      onSuccess: () => {
+        queryClient.invalidateQueries('images');
+      }
     }
   );
 
@@ -103,6 +106,7 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
           setError={setError}
           trigger={trigger}
           {...register('image', formValidations.image)}
+          error={errors.image}
           // TODO SEND IMAGE ERRORS
           // TODO REGISTER IMAGE INPUT WITH VALIDATIONS
         />
@@ -110,6 +114,7 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
         <TextInput
           placeholder="Título da imagem..."
           {...register('title', formValidations.title)}
+          error={errors.title}
           // TODO SEND TITLE ERRORS
           // TODO REGISTER TITLE INPUT WITH VALIDATIONS
         />
@@ -117,7 +122,7 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
         <TextInput
           placeholder="Descrição da imagem..."
           {...register('description', formValidations.description)}
-          // error={errors.description}
+          error={errors.description}
           // TODO SEND DESCRIPTION ERRORS
           // TODO REGISTER DESCRIPTION INPUT WITH VALIDATIONS
         />
