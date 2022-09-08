@@ -8,9 +8,24 @@ import { api } from '../services/api';
 import { Loading } from '../components/Loading';
 import { Error } from '../components/Error';
 
+type FetchImagesResponse = {
+  data: Array<{
+    description: string;
+    id: string;
+    title: string;
+    ts: number;
+    url: string;
+  }>;
+  after: string | null;
+};
+
 export default function Home(): JSX.Element {
-  const fetchImages = async ({pageParam = 1}) => {
-    const res = await api.get('api/images')
+  const fetchImages = async ({pageParam = null}) => {
+    const res = await api.get('api/images', {
+      params: {
+        after: pageParam
+      }
+    })
     const { data } = res.data;
     return {
       data,
@@ -28,19 +43,26 @@ export default function Home(): JSX.Element {
     'images',
     fetchImages,
     {
-      getNextPageParam: l => l.data.pageParams
+      getNextPageParam: l => l.data.after,
     }
   );
 
-  useEffect(() => {console.log(data )}, [data])
+  
 
   const formattedData = useMemo(() => {
     // TODO FORMAT AND FLAT DATA ARRAY
+    if (!data?.pages.length) return []; //
+
+    const images: FetchImagesResponse['data'] = [];
+
+    data.pages.forEach(page => {
+      images.push(...page.data);
+    });
+
+    return images;
   }, [data]);
 
-  const handleFetchNextPage = () => {
-    fetchNextPage: fetchImages
-  }
+  useEffect(() => {console.log(formattedData)}, [formattedData])
 
   // TODO RENDER LOADING SCREEN
   if (isLoading){
